@@ -1,10 +1,12 @@
 Package: torontocrimeexplorer
 Title: Toronto Crime Explorer
 Version: 0.1.0
-Authors@R: person("Kevin", "Yang", role = c("aut", "cre"))
+Authors@R: c(person("STA 313 project team", role = "aut"),
+    person("Kevin", "Yang", role = "cre"))
 Description: An interactive explorer of historical Toronto crime records, with
-    consistent spatial and temporal filters. Recovered collaborative implementation
-    modernized with AI assistance; see PROVENANCE.md for contribution details.
+    consistent spatial and temporal filters. Originally developed by a team of six
+    students for STA 313 Data Visualization and modernized with AI assistance.
+    See PROVENANCE.md for contribution details.
 License: file LICENSE
 Encoding: UTF-8
 Depends: R (>= 4.1.0)

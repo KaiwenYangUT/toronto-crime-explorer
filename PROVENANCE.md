@@ -2,9 +2,7 @@
 
 ## Project contributions
 
-According to Kevin Yang's account, Kevin originated the concept, designed the application and its principal features, made major technical decisions, and implemented the project. A friend also implemented some portions and ran the application. The recovered copy was transferred from the friend's laptop after Kevin lost his own copy.
-
-The recovered files contain no Git history or file-level contribution ledger, so the division of historical code authorship cannot be independently reconstructed from this directory. Machine usernames and transfer paths do not establish authorship. The collaborator's preferred credit and exact contributions remain to be confirmed; no sole-authorship claim is made.
+This project was developed by a team of six students as a group course project for STA 313 Data Visualization.
 
 The new Toronto Crime Explorer implementation and documentation were prepared with Codex assistance. It retains the project's core concept, source datasets, and recovered destination/station coordinates while replacing the monolithic UI/server and implicit workspace-based data flow with shared functions, a Shiny module, an explicit build, and tests.
 
@@ -32,4 +30,4 @@ Packages are listed in DESCRIPTION and retain their own licenses. This project d
 
 ## Release decisions still needed
 
-Confirm the collaborator's contribution/credit and applicable permission to publish their code; recover data and coordinate sources and terms; choose an appropriate code license with those facts established. LICENSE is explicitly a pending-status notice, not an open-source license. Generated data remains excluded from version control until redistribution is resolved.
+Confirm the project team's contribution credits and applicable permission to publish the group code; recover data and coordinate sources and terms; choose an appropriate code license with those facts established. LICENSE is explicitly a pending-status notice, not an open-source license. Generated data remains excluded from version control until redistribution is resolved.

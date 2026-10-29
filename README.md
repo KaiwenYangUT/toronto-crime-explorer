@@ -91,4 +91,4 @@ The source repository is https://github.com/KaiwenYangUT/toronto-crime-explorer.
 
 ## Contributions
 
-Kevin Yang describes originating the concept, designing the application, making principal technical decisions, and implementing the project. A friend also contributed implementation and ran the app. This copy was recovered from that friend's laptop after Kevin's copy was lost. The modernization was carried out with Codex assistance. See [PROVENANCE.md](PROVENANCE.md) for the distinction between this account and independently recoverable evidence.
+This project was developed by a team of six students as a group course project for STA 313 Data Visualization.
