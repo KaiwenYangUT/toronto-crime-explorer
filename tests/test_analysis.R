@@ -1,0 +1,63 @@
+source("R/analysis.R")
+for (file in c("app.R", list.files("R", full.names = TRUE, pattern = "\\.R$"),
+               list.files("scripts", full.names = TRUE, pattern = "\\.R$"))) parse(file)
+n <- 0L
+check <- function(label, condition) {
+  if (!isTRUE(condition)) stop("FAIL: ", label)
+  n <<- n + 1L
+  cat("PASS:", label, "\n")
+}
+d <- as.Date(c("2023-02-01", "2023-03-01", "2023-04-01", "2023-10-01", "2023-11-01", "2023-12-01"))
+check("Midterm means February and October only", identical(period_mask(d, rep(12, 6), "midterm"), c(TRUE,FALSE,FALSE,TRUE,FALSE,FALSE)))
+check("Final means April and December only", identical(period_mask(d, rep(12, 6), "final"), c(FALSE,FALSE,TRUE,FALSE,FALSE,TRUE)))
+week <- rep(seq(as.Date("2023-01-02"), by = "day", length.out = 7), each = 24)
+hours <- rep(0:23, 7)
+peak <- period_mask(week, hours, "peak")
+off <- period_mask(week, hours, "off_peak")
+check("Peak and off-peak partition all 168 weekly hours", all(xor(peak, off)) && sum(peak) == 35)
+check("19:00 is never peak", !any(peak[hours == 19]))
+breaks <- as.Date(c("2023-12-22", "2023-12-23", "2024-01-03", "2024-01-04", "2024-06-01", "2024-08-31", "2024-09-01"))
+check("Holiday boundaries are inclusive and precise", identical(period_mask(breaks, rep(12, 7), "break_time"), c(FALSE,TRUE,TRUE,FALSE,TRUE,TRUE,FALSE)))
+check("Coincident locations have zero distance", haversine_m(-79.4,43.7,-79.4,43.7) == 0)
+check("One equatorial degree is approximately 111.2 km", abs(haversine_m(1,0,0,0)-111195) < 1)
+events <- data.frame(event_id = c("a","b","c"), date = as.Date(c("2023-04-01","2023-04-01","2023-04-03")),
+ hour = c(12L,19L,7L), weekday = c(6L,6L,1L), category = c("Robbery","Robbery","Bicycle theft"),
+ longitude = c(-79.4,-79.5,-79.4), latitude = c(43.7,43.7,43.7), status = c("Not applicable","Not applicable","RECOVERED"))
+center <- data.frame(longitude = -79.4,latitude = 43.7)
+date_span <- as.Date(c("2023-04-01","2023-04-03"))
+check("Spatial selection removes distant records", identical(filter_events(events, date_span, center = center)$event_id,c("a","c")))
+check("Empty categories produce no records", nrow(filter_events(events,date_span,categories=character())) == 0)
+check("Empty weekdays produce no records", nrow(filter_events(events,date_span,weekdays=integer())) == 0)
+check("Date endpoints are included", nrow(filter_events(events, date_span)) == 3)
+check("Weekday/hour/category filters compose", identical(filter_events(events,date_span,categories="Bicycle theft", weekdays=1, hours=c(7,7))$event_id,"c"))
+counts <- daily_counts(events,date_span,crime_categories)
+check("Daily series fills zero days and conserves record count", nrow(counts) == 9 && sum(counts$count) == nrow(events) && all(counts$count[counts$date == as.Date("2023-04-02")] == 0))
+counts <- daily_counts(events,date_span,crime_categories,weekdays=1)
+check("Excluded days are gaps rather than false zero counts", all(is.na(counts$count[counts$date != as.Date("2023-04-03")])) )
+check("No categories returns an empty daily table", nrow(daily_counts(events,date_span,character())) == 0)
+counts <- daily_counts(events,date_span,crime_categories,period="peak",hours=c(19,23))
+check("Incompatible hour and preset filters create no eligible days", all(is.na(counts$count)))
+stations <- data.frame(id=c("far","near"),name=c("Far","Near"),longitude=c(-79.5,-79.4),latitude=c(43.7,43.7))
+check("Nearest listed station is calculated from coordinates", nearest_station(center,stations)$id == "near")
+check("Reversed dates are rejected", inherits(try(filter_events(events,rev(date_span)),silent=TRUE),"try-error"))
+if (file.exists("data/processed/crime.rds")) {
+ b <- readRDS("data/processed/crime.rds")
+ validate_bundle(b)
+ check("Prepared data has no exact duplicate analysis rows", !anyDuplicated(b$events))
+ check("All three categories are represented", setequal(unique(b$events$category),crime_categories))
+ check("Recovered bicycle records remain in historical counts", any(b$events$status == "RECOVERED"))
+ check("Coverage reflects the actual supplied snapshots", max(b$events$date) == as.Date("2023-12-31"))
+ x <- filter_events(b$events,range(b$events$date))
+ check("Unrestricted filters preserve every prepared record", nrow(x) == nrow(b$events))
+}
+daily <- data.frame(date = as.Date(c("2023-01-01", "2023-01-02", "2023-01-03", "2023-02-01")),
+ category = "Robbery", count = c(2, 3, NA, 5))
+weekly <- trend_counts(daily, "week")
+monthly <- trend_counts(daily, "month")
+check("Weekly bins start Monday and conserve counts", all(format(weekly$date, "%u") == "1") && sum(weekly$count, na.rm = TRUE) == 10)
+check("Monthly bins conserve counts and count eligible days", identical(monthly$count, c(5, 5)) && identical(monthly$eligible_days, c(2L,1L)))
+excluded <- daily; excluded$count <- NA_real_
+check("Excluded periods remain gaps in aggregated trends", all(is.na(trend_counts(excluded, "week")$count)))
+check("Daily trend retains the original values", identical(trend_counts(daily,"day")$count, daily$count))
+check("Empty trends remain empty", nrow(trend_counts(daily[FALSE,], "week")) == 0)
+cat(n, "checks passed.\n")

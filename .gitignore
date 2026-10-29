@@ -1,0 +1,19 @@
+# Personal session and deployment state
+.Rhistory
+.Rapp.history
+.RData
+.Ruserdata
+.DS_Store
+.Rproj.user/
+rsconnect/
+.Renviron
+.env
+# Data remains local until source permissions are verified
+data/processed/*
+!data/processed/.gitkeep
+data/raw/
+# Local environment libraries and caches
+renv/library/
+renv/staging/
+renv/cache/
+.Rlib/

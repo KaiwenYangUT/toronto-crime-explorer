@@ -1,0 +1,17 @@
+Package: torontocrimeexplorer
+Title: Toronto Crime Explorer
+Version: 0.1.0
+Authors@R: person("Kevin", "Yang", role = c("aut", "cre"))
+Description: An interactive explorer of historical Toronto crime records, with
+    consistent spatial and temporal filters. Recovered collaborative implementation
+    modernized with AI assistance; see PROVENANCE.md for contribution details.
+License: file LICENSE
+Encoding: UTF-8
+Depends: R (>= 4.1.0)
+Imports:
+    shiny,
+    bslib,
+    leaflet,
+    plotly,
+    ggplot2,
+    data.table

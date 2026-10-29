@@ -1,0 +1,16 @@
+"id","name","type","latitude","longitude"
+"site1","Little Canada","tourist",43.6568357659546,-79.3807673729588
+"site2","Nathan Phillips Square","tourist",43.652873349564,-79.3833481216624
+"site3","CN Tower","tourist",43.6429077234565,-79.3859893011263
+"site4","Centre Island","tourist",43.6290482186998,-79.3937868320928
+"site5","The Distillery District","tourist",43.6502170318491,-79.3599501085414
+"site6","High Park","tourist",43.6467341948746,-79.4637439478213
+"site7","Casa Loma","tourist",43.6784715978572,-79.4093527085398
+"site8","Ripley's Aquarium of Canada","tourist",43.6425511452949,-79.3865753815551
+"site9","Graffiti Alley","tourist",43.6480719373943,-79.3985383766568
+"site10","Chinatown centre","tourist",43.6511030142807,-79.3982535472462
+"site11","Robarts Library","student",43.6647964177303,-79.3993198588166
+"site12","Kelly Library","student",43.6654365144913,-79.3892827895009
+"site13","E.J. Pratt Library","student",43.6668146698503,-79.3914308429222
+"site14","Gerstein Library","student",43.662280915649,-79.3937379968961
+"site15","University College Library","student",43.6631026548455,-79.3955204005935
